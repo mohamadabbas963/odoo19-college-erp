@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Action -->
+    <record id="action_hospital_appointment" model="ir.actions.act_window">
+        <field name="name">Appointment</field>
+        <field name="res_model">hospital.appointment</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new appointment
+            </p>
+        </field>
+    </record>
+
+    <!-- List View -->
+    <record id="view_hospital_appointment_list" model="ir.ui.view">
+        <field name="name">hospital.appointment.list</field>
+        <field name="model">hospital.appointment</field>
+        <field name="arch" type="xml">
+            <list string="Appointment">
+                <field name="reference"/>
+                <field name="patient_id"/>
+                <field name="create_uid"/>
+                <field name="date_appointment"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_hospital_appointment_form" model="ir.ui.view">
+        <field name="name">hospital.appointment.form</field>
+        <field name="model">hospital.appointment</field>
+        <field name="arch" type="xml">
+            <form string="Appointment">
+ <header>
+    <field name="state" widget="statusbar"/>
+
+    <button string="Confirm" type="object" name="action_confirm"
+            invisible="state != 'draft'"/>
+
+    <button string="Done" type="object" name="action_done"
+            invisible="state not in ('confirmed','ongoing')"/>
+
+    <button string="Cancel" type="object" name="action_cancel"
+            invisible="state not in ('draft','confirmed')"/>
+</header>
+                <sheet>
+                    <group>
+                        <field name="reference" readonly="1"/>
+                        <field name="patient_id"/>
+                        <field name="date_of_birth"/>
+                        <field name="date_appointment"/>
+                        <field name="note"/>
+                    </group>
+                    <group>
+                            <field name="total_qty"/>
+                            <field name="create_uid"/>
+                    </group>
+                    <notebook>
+                    <page name="appointment_lines" string="Lines">
+                             <field name="appointment_line_ids">
+                      <list editable="bottom">
+                              <field name="product_id"/>
+                              <field name="qty"/>
+                      </list>
+                        <form>
+                           <group>
+                                   <field name="product_id"/>
+                                   <field name="qty"/>
+                           </group>
+                        </form>
+                    </field>
+                    </page>
+                        <page name="other_info" string="Other Info">
+                            <group>
+                            <field name="note"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+</odoo>
+
+

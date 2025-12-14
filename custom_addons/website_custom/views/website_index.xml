@@ -1,0 +1,38 @@
+<odoo>
+    <!-- تعريف QWeb view جديدة للصفحة الرئيسية بدون وراثة مباشرة لتجنب المشاكل -->
+    <record id="website_custom_homepage" model="ir.ui.view">
+        <field name="name">website.custom.homepage</field>
+        <field name="type">qweb</field>
+        <field name="key">website.homepage</field>
+        <field name="arch" type="xml">
+            <t t-name="website.homepage">
+                <div id="wrap">
+                    <div class="container mt-4 mb-4">
+                        <h1>Welcome to Your Custom eCommerce</h1>
+                        <p>This homepage is fully controlled by your custom module and ready for further development.</p>
+
+                        <!-- مثال على الأقسام الأولى التي يمكن إضافتها -->
+                        <section id="featured-products" class="mt-5">
+                            <h2>Featured Products</h2>
+                            <div class="row">
+                                <t t-foreach="request.env['product.template'].search([], limit=4)" t-as="product">
+                                    <div class="col-md-3">
+                                        <div class="card mb-3">
+                                            <img t-att-src="product.image_1920 and 'data:image/png;base64,' + product.image_1920 or ''" class="card-img-top"/>
+                                            <div class="card-body">
+                                                <h5 class="card-title"><t t-esc="product.name"/></h5>
+                                                <p class="card-text"><t t-esc="product.list_price"/> USD</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </section>
+
+                    </div>
+                </div>
+            </t>
+        </field>
+    </record>
+</odoo>
+

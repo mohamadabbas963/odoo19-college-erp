@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================= -->
+    <!-- Attendance Views + Action     -->
+    <!-- ============================= -->
+
+    <record id="view_college_attendance_tree" model="ir.ui.view">
+        <field name="name">college.attendance.list</field>
+        <field name="model">college.attendance</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="student_id"/>
+                <field name="check_in"/>
+                <field name="check_out"/>
+                <field name="duration"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_college_attendance_form" model="ir.ui.view">
+        <field name="name">college.attendance.form</field>
+        <field name="model">college.attendance</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="student_id"/>
+                        <field name="check_in"/>
+                        <field name="check_out"/>
+                        <field name="duration"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="attendance_action" model="ir.actions.act_window">
+        <field name="name">Attendance</field>
+        <field name="res_model">college.attendance</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <!-- ============================= -->
+    <!-- Fees Views + Action           -->
+    <!-- ============================= -->
+
+    <record id="view_college_fees_tree" model="ir.ui.view">
+        <field name="name">college.fees.tree</field>
+        <field name="model">college.fees</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="student_id"/>
+                <field name="name"/>
+                <field name="amount"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_college_fees_form" model="ir.ui.view">
+        <field name="name">college.fees.form</field>
+        <field name="model">college.fees</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="student_id"/>
+                        <field name="name"/>
+                        <field name="amount"/>
+                        <field name="state"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="fees_action" model="ir.actions.act_window">
+        <field name="name">Fees</field>
+        <field name="res_model">college.fees</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <!-- ============================= -->
+    <!-- Certificates Views + Action   -->
+    <!-- ============================= -->
+
+    <record id="view_college_certificate_tree" model="ir.ui.view">
+        <field name="name">college.certificate.list</field>
+        <field name="model">college.certificate</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="student_id"/>
+                <field name="name"/>
+                <field name="date_issue"/>
+                <field name="sequence"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_college_certificate_form" model="ir.ui.view">
+        <field name="name">college.certificate.form</field>
+        <field name="model">college.certificate</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="student_id"/>
+                        <field name="name"/>
+                        <field name="date_issue"/>
+                        <field name="sequence"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="certificate_action" model="ir.actions.act_window">
+        <field name="name">Certificates</field>
+        <field name="res_model">college.certificate</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

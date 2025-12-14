@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="1">
+
+    <!-- Technical group to show module in Access Rights -->
+    <record id="group_hospital_module" model="res.groups">
+      <field name="name">Hospital Module</field>
+      <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+      <field name="comment">This group is used to display Hospital as a module in Access Rights</field>
+    </record>
+
+    <!-- Receptionist Group -->
+    <record id="group_hospital_receptionist" model="res.groups">
+      <field name="name">Receptionist</field>
+      <field name="implied_ids" eval="[(4, ref('hospital_management.group_hospital_module'))]"/>
+      <field name="comment">Access to appointments</field>
+    </record>
+
+    <!-- Doctors Group -->
+    <record id="group_hospital_doctors" model="res.groups">
+      <field name="name">Doctors</field>
+      <field name="implied_ids" eval="[(4, ref('hospital_management.group_hospital_module'))]"/>
+      <field name="comment">Access to patient details</field>
+    </record>
+
+    <!-- Nurse Group -->
+    <record id="group_hospital_nurse" model="res.groups">
+      <field name="name">Nurse</field>
+      <field name="implied_ids" eval="[(4, ref('hospital_management.group_hospital_module'))]"/>
+      <field name="comment">Assist doctors and view patients</field>
+    </record>
+
+    <!-- Receptionist can see only own appointments (Record Rule) -->
+    <record id="receptionist_own_appointment_rule" model="ir.rule">
+      <field name="name">receptionist: view own appointments</field>
+      <field name="model_id" ref="model_hospital_appointment"/>
+      <field name="groups" eval="[(6, 0, [ref('hospital_management.group_hospital_receptionist')])]"/>
+      <field name="domain_force">[('create_uid','=', user.id)]</field>
+    </record>
+
+  </data>
+</odoo>

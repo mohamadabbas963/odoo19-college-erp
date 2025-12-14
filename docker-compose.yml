@@ -1,0 +1,46 @@
+﻿services:
+  db-22:
+    image: postgres:15
+    container_name: db-22
+    environment:
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+      POSTGRES_DB: odooO22
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U odoo" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  odoo-22:
+    image: odoo:19
+    container_name: odoo-22
+    depends_on:
+      db-22:
+        condition: service_healthy
+    ports:
+      - "8069:8069"
+    volumes:
+      - ./custom_addons:/mnt/custom_addons
+      - ./config/odoo.conf:/etc/odoo/odoo.conf
+      - odoo_data:/var/lib/odoo   # استخدام volume داخلي لتجنب مشاكل الصلاحيات
+    command: >
+      odoo
+      -d odooO22
+      --config=/etc/odoo/odoo.conf
+      --dev=reload,qweb,xml
+    restart: always
+
+networks:
+  default:
+    name: odoo22_default
+
+volumes:
+  odoo_data:
+  pg_data:
+

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ======================= -->
+    <!-- Certificate Tree View -->
+    <!-- ======================= -->
+    <record id="college_certificate_view_form" model="ir.ui.view">
+        <field name="name">college.certificate.form</field>
+        <field name="model">college.certificate</field>
+        <field name="arch" type="xml">
+            <form string="Certificate">
+                <sheet>
+                    <group>
+                        <field name="student_id"/>
+                        <field name="student_name" readonly="1"/>
+                        <field name="admission_no" readonly="1"/>
+                        <field name="certificate_name"/>
+                        <field name="issued_date"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- ======================= -->
+    <!-- Certificate Form View -->
+    <!-- ======================= -->
+     <record id="college_certificate_view_tree" model="ir.ui.view">
+        <field name="name">college.certificate.list</field>
+        <field name="model">college.certificate</field>
+        <field name="arch" type="xml">
+            <list string="Certificates">
+                <field name="student_id"/>
+                <field name="student_name"/>
+                <field name="admission_no"/>
+                <field name="certificate_name"/>
+                <field name="issued_date"/>
+            </list>
+        </field>
+    </record>
+
+
+    <!-- ======================= -->
+    <!-- Certificate Window Action -->
+    <!-- ======================= -->
+    <record id="certificate_action" model="ir.actions.act_window">
+        <field name="name">Certificates</field>
+        <field name="res_model">college.certificate</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first certificate</p>
+        </field>
+    </record>
+
+</odoo>

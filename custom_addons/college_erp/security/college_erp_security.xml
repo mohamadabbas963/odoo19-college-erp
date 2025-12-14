@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Module Category يظهر فقط داخل Apps -->
+    <record model="ir.module.category" id="module_category_college_erp">
+        <field name="name">College ERP</field>
+        <field name="description">Category for College ERP</field>
+    </record>
+
+    <!-- Group Teacher -->
+    <record id="group_college_erp_teacher" model="res.groups">
+        <field name="name">Teacher</field>
+    </record>
+
+    <!-- Group Principal -->
+    <record id="group_college_erp_principal" model="res.groups">
+        <field name="name">Principal</field>
+    </record>
+
+</odoo>
+
+

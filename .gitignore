@@ -1,0 +1,20 @@
+# Odoo core
+addons/
+
+# Python
+__pycache__/
+*.pyc
+
+# Odoo runtime
+.odoo/
+*.log
+filestore/
+
+# VS Code / WSL
+.vscode/
+.vscode-server/
+
+# OS
+.DS_Store
+Thumbs.db
+

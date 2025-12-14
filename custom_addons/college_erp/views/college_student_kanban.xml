@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="college_student_view_kanban" model="ir.ui.view">
+        <field name="name">college.student.kanban</field>
+        <field name="model">college.student</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column" default_group_by="status">
+                <field name="name"/>
+                <field name="status"/>
+                <field name="admission_no"/>
+                <field name="image_1920"/>
+
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="o_kanban_box">
+                            <div class="o_kanban_image">
+                                <img t-att-src="kanban_image('college.student','image_1920',record.id.raw_value)"/>
+                            </div>
+                            <div class="o_kanban_content">
+                                <strong><t t-esc="record.name.value"/></strong>
+                                <div>Admission No: <t t-esc="record.admission_no.value"/></div>
+                                <div>Status: <t t-esc="record.status.value"/></div>
+                            </div>
+                            <div class="o_kanban_bottom_right">
+                                <t t-if="record.status.value == 'new'">
+                                    <button type="object" name="action_activate" string="Activate"/>
+                                </t>
+                                <t t-if="record.status.value == 'active'">
+                                    <button type="object" name="action_graduate" string="Graduate"/>
+                                </t>
+                                <t t-if="['active','graduated'].includes(record.status.value)">
+                                    <button type="object" name="action_block" string="Block"/>
+                                </t>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+
+            </kanban>
+        </field>
+    </record>
+</odoo>
