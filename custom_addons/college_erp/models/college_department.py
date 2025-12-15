@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, api
 
 class CollegeDepartment(models.Model):
     _name = "college.department"
@@ -17,3 +17,30 @@ class CollegeDepartment(models.Model):
         'department_id',
         string="Students"
     )
+    students_count = fields.Integer(
+        string='Number of Students',
+        compute='_compute_students_count'
+    )
+
+    @api.depends('student_ids')
+    def _compute_students_count(self):
+        for rec in self:
+            # حساب عدد الطلاب المرتبطين بالقسم
+            rec.students_count = len(rec.student_ids)
+    def action_view_department_students(self):
+        """
+        يفتح عرضاً (Action) يحتوي على قائمة بجميع الطلاب 
+        المرتبطين بالقسم الحالي.
+        """
+        # نضمن أن هذا الإجراء يتم على سجل واحد فقط
+        self.ensure_one()
+
+        # بناء الإجراء (Action) الذي سيتم تنفيذه
+        return {
+            'name': 'Students in ' + self.name,   # اسم العرض
+            'view_mode': 'list,form',            # طريقة العرض (قائمة، نموذج)
+            'res_model': 'college.student',      # النموذج الهدف
+            'type': 'ir.actions.act_window',     # نوع الإجراء
+            'domain': [('department_id', '=', self.id)], # ✅ الفلترة الأساسية
+            'context': {'default_department_id': self.id}, # عند إنشاء طالب جديد، يتم تعيين القسم تلقائيًا
+        }        
