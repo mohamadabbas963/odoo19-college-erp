@@ -18,7 +18,6 @@
      <field name="name">college.department.view.form</field>
      <field name="model">college.department</field>
      <field name="arch" type="xml">
-     <field name="priority" eval="1"/>
          <form string="Department">
              <sheet>
                  <button type="object" class="oe_stat_button"
