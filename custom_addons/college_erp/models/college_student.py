@@ -63,7 +63,11 @@ class CollegeStudent(models.Model):
     country_code = fields.Char(related='country_id.code', string="Country Code", store=True)
     same_as_communication = fields.Boolean(string="Same as Communication", default=True)
 
-    image_1920 = fields.Image()
+    image_1920 = fields.Image(string="Student Image")
+    # نسخ مصغرة للعرض في Kanban وForm
+    image_1024 = fields.Image("Image 1024", related="image_1920", max_width=1024)
+    image_512 = fields.Image("Image 512", related="image_1920", max_width=512)
+    image_256 = fields.Image("Image 256", related="image_1920", max_width=256)
 
     # ---------- RELATION FIELDS (Many2one) ----------
     department_id = fields.Many2one('college.department', string="Department")

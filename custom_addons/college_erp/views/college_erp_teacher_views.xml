@@ -38,10 +38,12 @@
         </field>
     </record>
 
-    <!-- Window Action -->
-    <record id="action_teacher" model="ir.actions.act_window">
-        <field name="name">Teachers</field>
-        <field name="res_model">college.teacher</field>
-        <field name="view_mode">list,form</field>
-    </record>
+     <!-- Window Action -->
+     <record id="action_college_teacher" model="ir.actions.act_window">
+       <field name="name">Teachers</field>
+       <field name="res_model">college.teacher</field>
+       <field name="view_mode">list,form,kanban</field>
+       <field name="context">{}</field>
+     </record>
+
 </odoo>

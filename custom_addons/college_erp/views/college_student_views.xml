@@ -52,7 +52,7 @@
             <form string="Student">
                 <sheet>
                     <group>
-                        <field name="image_1920" class="oe_avatar" widget="image"/>
+                        <field name="image_1920" widget="image" class="oe_avatar"/>
                     </group>
 
                     <header>
@@ -97,6 +97,7 @@
                         <field name="email"/>
                         <field name="mother_name"/>
                         <field name="father_name"/>
+                        <field name="image_256" widget="image"/>
                     </group>
 
                     <notebook>

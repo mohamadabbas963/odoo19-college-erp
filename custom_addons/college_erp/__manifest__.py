@@ -28,6 +28,7 @@
         # Main student view after actions exist
         # ---------------------
         "views/college_student_views.xml",
+        "views/college_erp_teacher_views.xml",
         "views/college_student_kanban.xml",
         "views/college_student_actions.xml",
         "views/college_student_smart_buttons.xml",
