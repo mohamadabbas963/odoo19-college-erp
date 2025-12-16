@@ -40,14 +40,24 @@ class CollegeStudent(models.Model):
         required=True
     )
     admission_date = fields.Date(string="Admission Date", required=True)
+    date_of_birth = fields.Date(
+    string="Date of Birth",
+    required=True
+    )
+
+    age = fields.Integer(
+      string="Age",
+      compute="_compute_age",
+      store=True,
+     readonly=True
+    )
     father_name = fields.Char(string="Father's Name")
     mother_name = fields.Char(string="Mother's Name")
     communication_address = fields.Text(string="Communication Address", required=True)
     email = fields.Char(string="Email")
     phone = fields.Char(string="Phone")
 
-    # ======= CALCULATED FIELD =======
-    age = fields.Integer(string="Age", compute="_compute_age", store=True)
+    
 
     # ---------- ADDRESS FIELDS ----------
     street = fields.Char()
@@ -127,16 +137,22 @@ class CollegeStudent(models.Model):
         for rec in self:
             rec.name = f"{rec.first_name or ''} {rec.last_name or ''} [{rec.admission_no or ''}]"
 
-    @api.depends('admission_date')
+    @api.depends('date_of_birth')
     def _compute_age(self):
-        today = date.today()
-        for rec in self:
-            if rec.admission_date:
-                # حساب الفرق بالسنوات
-                rec.age = today.year - rec.admission_date.year - \
-                          ((today.month, today.day) < (rec.admission_date.month, rec.admission_date.day))
-            else:
-                rec.age = 0
+       today = date.today()
+       for rec in self:
+           if rec.date_of_birth:
+                 rec.age = today.year - rec.date_of_birth.year - \
+                      ((today.month, today.day) < (rec.date_of_birth.month, rec.date_of_birth.day))
+           else:
+                 rec.age = 0
+    
+    @api.constrains('date_of_birth')
+    def _check_date_of_birth(self):
+     for rec in self:
+        if rec.date_of_birth and rec.date_of_birth > date.today():
+            raise ValidationError("Date of Birth cannot be in the future.")
+
 
     @api.depends('attendance_ids')
     def _compute_attendance_count(self):

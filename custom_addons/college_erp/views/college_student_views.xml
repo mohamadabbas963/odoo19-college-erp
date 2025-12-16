@@ -89,6 +89,7 @@
                         <field name="name" readonly="1"/>
                         <field name="admission_no"/>
                         <field name="admission_date"/>
+                        <field name="date_of_birth" required="1"/>
                         <field name="age" readonly="1"/>
                         <field name="gender"/>
                         <field name="first_name"/>
@@ -164,6 +165,8 @@
                 <field name="name"/>
                 <field name="admission_no"/>
                 <field name="admission_date"/>
+                <field name="date_of_birth"/>
+                <field name="age"/>
                 <field name="gender"/>
                 <field name="email"/>
                 <field name="phone"/>

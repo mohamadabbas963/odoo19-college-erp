@@ -19,6 +19,7 @@
                             </div>
                             <div class="o_kanban_content">
                                 <strong><t t-esc="record.name.value"/></strong>
+                                <div>Age: <t t-esc="record.age.value"/></div> 
                                 <div>Admission No: <t t-esc="record.admission_no.value"/></div>
                                 <div>Status: <t t-esc="record.status.value"/></div>
                             </div>
