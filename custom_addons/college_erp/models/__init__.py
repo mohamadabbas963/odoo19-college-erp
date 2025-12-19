@@ -4,3 +4,4 @@ from . import college_certificate
 from . import college_attendance
 from . import college_department
 from . import college_erp_teacher
+from . import account_move
