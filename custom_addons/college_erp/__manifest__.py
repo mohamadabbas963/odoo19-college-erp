@@ -22,7 +22,7 @@ Form students administration to exams, covering all aspects of college administr
         "security/ir.model.access.csv",
 
         # 2. البيانات الأساسية والتسلسلات
-        "views/college_fees_sequence.xml",
+        "data/college_fees_sequence.xml",
         "views/college_department_views.xml",
 
         # 3. واجهات الموديلات المساعدة (Views Only)
@@ -30,6 +30,7 @@ Form students administration to exams, covering all aspects of college administr
         "views/college_fees_views.xml",
         "views/college_fee_type_views.xml",
         "views/college_certificate_views.xml",
+        "views/college_appointment_views.xml",
         "views/account_move_views.xml",
         "views/college_erp_teacher_views.xml",
 

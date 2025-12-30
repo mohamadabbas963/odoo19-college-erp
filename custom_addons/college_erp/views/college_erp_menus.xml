@@ -51,4 +51,12 @@
               parent="menu_college_erp_root"
               action="action_college_teacher"
               sequence="10"/>
+
+    <menuitem id="menu_college_appointment"
+          name="Appointments"
+          parent="menu_college_erp_student"
+          action="action_college_appointment"
+          sequence="20"/>
+
+
 </odoo>
