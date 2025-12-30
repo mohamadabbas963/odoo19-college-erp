@@ -6,3 +6,4 @@ access_college_certificate,access.college.certificate,college_erp.model_college_
 access_college_department,access.college.department,college_erp.model_college_department,base.group_user,1,1,1,1
 access_college_fee_type,College Fee Type Access,model_college_fee_type,base.group_user,1,1,1,1
 access_college_teacher_user,access_college_teacher_user,model_college_teacher,base.group_user,1,1,1,1
+access_college_student_appointment,access.college.student.appointment,model_college_student_appointment,,1,1,1,1

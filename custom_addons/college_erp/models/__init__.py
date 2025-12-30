@@ -5,3 +5,4 @@ from . import college_attendance
 from . import college_department
 from . import college_erp_teacher
 from . import account_move
+from . import college_student_appointment
