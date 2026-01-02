@@ -6,3 +6,5 @@ from . import college_department
 from . import college_erp_teacher
 from . import account_move
 from . import college_student_appointment
+from . import college_course_registration
+from . import college_course

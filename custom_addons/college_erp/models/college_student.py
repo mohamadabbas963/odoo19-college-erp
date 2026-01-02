@@ -51,7 +51,12 @@ class CollegeStudent(models.Model):
 
     # 3. العلاقات
     department_id = fields.Many2one('college.department', string="Department", tracking=True)
-    attendance_ids = fields.One2many("college.attendance", "student_id", string="Attendance")
+
+    attendance_ids = fields.One2many(
+        "college.attendance.line",  # نربط الطالب بأسطر الحضور مباشرة
+        "student_id",  # هذا الحقل موجود فعلاً في موديل attendance line
+        string="Attendance"
+    )
     fees_ids = fields.One2many("college.fees", "student_id", string="Fees")
     certificate_ids = fields.One2many("college.certificate", "student_id", string="Certificates")
     appointment_count = fields.Integer(compute="_compute_counts", string="Appointment Count")

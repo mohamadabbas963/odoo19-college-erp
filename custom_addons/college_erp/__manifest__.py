@@ -12,9 +12,9 @@ Form students administration to exams, covering all aspects of college administr
     'sequence': 1,
     'depends': [
         'base',
-        'mail',      # لإضافة سجل النشاطات والمراسلات (Chatter)
-        'product',   # لإدارة أنواع الرسوم كمنتجات خدمية
-        'account',   # للنظام المالي والفواتير
+        'mail',  # لإضافة سجل النشاطات والمراسلات (Chatter)
+        'product',  # لإدارة أنواع الرسوم كمنتجات خدمية
+        'account',  # للنظام المالي والفواتير
     ],
     'data': [
         # 1. الحماية والصلاحيات (دائماً في البداية)
@@ -22,8 +22,10 @@ Form students administration to exams, covering all aspects of college administr
         "security/ir.model.access.csv",
 
         # 2. البيانات الأساسية والتسلسلات
-        "data/college_fees_sequence.xml",
+        "data/ir.sequence.csv",
         "views/college_department_views.xml",
+
+        "views/college_course_views.xml",
 
         # 3. واجهات الموديلات المساعدة (Views Only)
         "views/college_attendance_views.xml",
@@ -34,8 +36,10 @@ Form students administration to exams, covering all aspects of college administr
         "views/account_move_views.xml",
         "views/college_erp_teacher_views.xml",
 
+        "views/college_course_registration_views.xml",
+
         # 4. واجهات الطالب (Views) - تعريف الأشكال قبل استخدامها
-        "views/college_student_views.xml",   # يحتوي على Search View
+        "views/college_student_views.xml",  # يحتوي على Search View
         "views/college_student_kanban.xml",  # يحتوي على Kanban View
 
         # 5. الأكشنز (Actions) - تعتمد على الواجهات أعلاه
