@@ -81,7 +81,7 @@ class CollegeAttendanceLine(models.Model):
 
     attendance_id = fields.Many2one('college.attendance', ondelete='cascade')
     student_id = fields.Many2one('college.student', string="Student", readonly=True)
-    admission_no = fields.Char(related='student_id.admission_no', string="ID")
+    admission_no = fields.Char(related='student_id.admission_no', string="Admission No")
 
     status = fields.Selection([
         ('present', 'Present'),

@@ -6,6 +6,7 @@ class CollegeCourseRegistration(models.Model):
     _name = 'college.course.registration'
     _description = 'Course Registration'
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _order = 'date desc, id desc'
 
     name = fields.Char(string='Order Reference', required=True, copy=False, readonly=True,
                        default=lambda self: _('New'))
@@ -14,7 +15,9 @@ class CollegeCourseRegistration(models.Model):
                                     store=True)
     date = fields.Date(string='Registration Date', default=fields.Date.today)
 
-    # حالة السجل: المسودة، بانتظار الإدارة، مقبول، ملغى
+    # حقل الربط المالي الهام
+    is_invoiced = fields.Boolean(string="Invoiced", default=False, copy=False, tracking=True)
+
     state = fields.Selection([
         ('draft', 'Draft'),
         ('submitted', 'Submitted'),
@@ -22,9 +25,7 @@ class CollegeCourseRegistration(models.Model):
         ('cancel', 'Cancelled'),
     ], string='Status', default='draft', tracking=True)
 
-    # أسطر المواد المسجلة
     line_ids = fields.One2many('college.course.registration.line', 'registration_id', string='Courses')
-
     total_amount = fields.Float(string='Total Fees', compute='_compute_total_amount', store=True)
     invoice_id = fields.Many2one('account.move', string='Invoice', readonly=True)
 
@@ -33,16 +34,22 @@ class CollegeCourseRegistration(models.Model):
         for rec in self:
             rec.total_amount = sum(rec.line_ids.mapped('price'))
 
+    # دالة الترقيم التلقائي
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get('name', _('New')) == _('New'):
+                vals['name'] = self.env['ir.sequence'].next_by_code('college.course.registration') or _('New')
+        return super().create(vals_list)
+
     def action_submit(self):
         self.state = 'submitted'
 
     def action_confirm(self):
-        # هنا يكمن دور الإدارة القوي في القبول وإنشاء الفاتورة
         for rec in self:
             if not rec.line_ids:
                 raise UserError(_("You cannot confirm a registration without courses!"))
             rec.state = 'confirmed'
-            # (هنا سنضع كود إنشاء الفاتورة تلقائياً في الخطوة القادمة)
 
     def action_cancel(self):
         self.state = 'cancel'
@@ -52,12 +59,16 @@ class CollegeCourseRegistrationLine(models.Model):
     _name = 'college.course.registration.line'
     _description = 'Registration Line'
 
-    registration_id = fields.Many2one('college.course.registration')
+    registration_id = fields.Many2one('college.course.registration', ondelete='cascade')
     course_id = fields.Many2one('college.course', string='Course', required=True)
-    # جلب السعر تلقائياً بمجرد اختيار المادة (onchange)
+
+    # حقول السعر
     price = fields.Float(string='Price')
+    # هذا الحقل هو الذي ستقرأه دالة الفوترة في ملف الطالب
+    registration_fee = fields.Float(string="Fee", related='price', store=True)
 
     @api.onchange('course_id')
     def _onchange_course_id(self):
         if self.course_id:
-            self.price = self.course_id.unit_price
+            # تأكد أن اسم الحقل في موديل الكورس هو unit_price
+            self.price = self.course_id.unit_price or 0.0

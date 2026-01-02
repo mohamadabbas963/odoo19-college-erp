@@ -22,8 +22,7 @@
                     <button name="action_load_students"
                             string="Load Registered Students"
                             type="object"
-                            class="oe_highlight"
-                            invisible="attendance_line_ids != []"/>
+                            class="oe_highlight"/>
 
                     <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
                 </header>

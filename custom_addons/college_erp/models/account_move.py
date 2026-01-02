@@ -16,3 +16,4 @@ class AccountMove(models.Model):
         'college.student.appointment',
         string="Appointment"
     )
+    student_admission_no = fields.Char(related='student_id.admission_no', string="Admission ID", readonly=True)
