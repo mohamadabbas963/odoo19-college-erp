@@ -1,8 +1,13 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_college_student,access.college.student,college_erp.model_college_student,base.group_user,1,1,1,1
-access_college_attendance,access.college.attendance,college_erp.model_college_attendance,base.group_user,1,1,1,1
-access_college_fees,access.college.fees,college_erp.model_college_fees,base.group_user,1,1,1,1
-access_college_certificate,access.college.certificate,college_erp.model_college_certificate,base.group_user,1,1,1,1
-access_college_department,access.college.department,college_erp.model_college_department,base.group_user,1,1,1,1
-access_college_fee_type,College Fee Type Access,model_college_fee_type,base.group_user,1,1,1,1
-access_college_teacher_user,access_college_teacher_user,model_college_teacher,base.group_user,1,1,1,1
+access_college_student,access.college.student,model_college_student,base.group_user,1,1,1,1
+access_college_attendance,access.college.attendance,model_college_attendance,base.group_user,1,1,1,1
+access_college_attendance_line,access.college.attendance.line,model_college_attendance_line,base.group_user,1,1,1,1
+access_college_fees,access.college.fees,model_college_fees,base.group_user,1,1,1,1
+access_college_certificate,access.college.certificate,model_college_certificate,base.group_user,1,1,1,1
+access_college_department,access.college.department,model_college_department,base.group_user,1,1,1,1
+access_college_fee_type,access.college.fee.type,model_college_fee_type,base.group_user,1,1,1,1
+access_college_teacher,access.college.teacher,model_college_teacher,base.group_user,1,1,1,1
+access_college_student_appointment,access.college.student.appointment,model_college_student_appointment,base.group_user,1,1,1,1
+access_college_course,access.college.course,model_college_course,base.group_user,1,1,1,1
+access_college_course_registration,access.college.course.registration,model_college_course_registration,base.group_user,1,1,1,1
+access_college_course_registration_line,access.college.course.registration.line,model_college_course_registration_line,base.group_user,1,1,1,1

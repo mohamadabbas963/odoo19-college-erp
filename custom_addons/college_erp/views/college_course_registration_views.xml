@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_college_course_registration_form" model="ir.ui.view">
+        <field name="name">college.course.registration.form</field>
+        <field name="model">college.course.registration</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" string="Submit to Administration" type="object" class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_confirm" string="Approve &amp; Create Invoice" type="object"
+                            class="oe_highlight" invisible="state != 'submitted'" groups="base.group_system"/>
+                    <button name="action_cancel" string="Reject" type="object"
+                            invisible="state not in ['draft', 'submitted']"/>
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,confirmed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="student_id"/>
+                            <field name="department_id"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="invoice_id" invisible="not invoice_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Courses Selection">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="course_id"/>
+                                    <field name="price" readonly="1" force_save="1"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_amount" widget="monetary"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_college_course_registration" model="ir.actions.act_window">
+        <field name="name">Course Registrations</field>
+        <field name="res_model">college.course.registration</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first course registration!
+            </p>
+        </field>
+    </record>
+</odoo>

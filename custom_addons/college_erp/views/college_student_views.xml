@@ -1,47 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-
-    <record id="attendance_action" model="ir.actions.act_window">
-        <field name="name">Attendance</field>
-        <field name="res_model">college.attendance</field>
-        <field name="view_mode">list,form</field>
-        <field name="context">{'default_check_in': datetime.datetime.now()}</field>
-        <field name="domain">[('student_id','=',active_id)]</field>
-    </record>
-
     <record id="fees_action" model="ir.actions.act_window">
         <field name="name">Fees</field>
         <field name="res_model">college.fees</field>
         <field name="view_mode">list,form</field>
-        <field name="domain">[('student_id', '=', active_id)]</field>
     </record>
 
     <record id="certificate_action" model="ir.actions.act_window">
         <field name="name">Certificates</field>
         <field name="res_model">college.certificate</field>
         <field name="view_mode">list,form</field>
-        <field name="domain">[('student_id','=',active_id)]</field>
     </record>
 
     <record id="college_student_search_view" model="ir.ui.view">
         <field name="name">college.student.search</field>
         <field name="model">college.student</field>
         <field name="arch" type="xml">
-            <search string="Students">
-            </search>
-        </field>
-    </record>
+            <search string="Student Search">
+                <field name="name"/>
+                <field name="admission_no"/>
+                <field name="department_id"/>
 
-    <record id="action_college_erp" model="ir.actions.act_window">
-        <field name="name">Students</field>
-        <field name="res_model">college.student</field>
-        <field name="view_mode">list,form</field>
-        <field name="search_view_id" ref="college_student_search_view"/>
-        <field name="context">{'group_by': 'status'}</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Create your first student
-            </p>
+                <separator/>
+
+                <filter string="Active Students" name="active_status" domain="[('status', '=', 'active')]"/>
+                <filter string="With Debt" name="has_debt" domain="[('student_credit', '>', 0)]"/>
+
+                <separator/>
+
+                <filter string="Department" name="group_dept" context="{'group_by': 'department_id'}"/>
+                <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+            </search>
         </field>
     </record>
 
@@ -50,125 +39,134 @@
         <field name="model">college.student</field>
         <field name="arch" type="xml">
             <form string="Student">
+                <header>
+                    <button name="action_activate" type="object" string="Activate" class="oe_highlight"
+                            invisible="status != 'new'"/>
+                    <button name="action_graduate" type="object" string="Graduate" invisible="status != 'active'"/>
+                    <button name="action_block" type="object" string="Block"
+                            invisible="status not in ['active','graduated']"/>
+                    <button name="action_create_invoice" string="Create Invoice" type="object" class="oe_highlight"
+                            invisible="status == 'new'"/>
+                    <field name="status" widget="statusbar" statusbar_visible="new,active,graduated"/>
+                </header>
                 <sheet>
-                    <group>
-                        <field name="image_1920" widget="image" class="oe_avatar"/>
-                    </group>
-
-                    <header>
-                        <field name="status" widget="statusbar"
-                               statusbar_visible="new,active,graduated,blocked"/>
-
-                        <button name="action_activate" type="object" string="Activate"
-                                class="oe_highlight"
-                                modifiers="{'invisible': [('status','!=','new')]}"/>
-
-                        <button name="action_graduate" type="object" string="Graduate"
-                                modifiers="{'invisible': [('status','!=','active')]}"/>
-
-                        <button name="action_block" type="object" string="Block"
-                                modifiers="{'invisible': [('status','not in', ['active','graduated'])]}"/>
-
-                        <button type="action" class="oe_stat_button"
-                                name="%(attendance_action)d" icon="fa-calendar">
-                            <field name="attendance_count" string="Attendance"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_appointments" type="object" class="oe_stat_button" icon="fa-calendar">
+                            <div class="o_stat_info">
+                                <field name="appointment_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Appointments</span>
+                            </div>
                         </button>
 
-                        <button type="action" class="oe_stat_button"
-                                name="%(fees_action)d" icon="fa-money">
-                            <field name="fees_count" string="Fees"/>
+                        <button type="action" name="%(action_college_course_registration)d" class="oe_stat_button"
+                                icon="fa-book"
+                                context="{'default_student_id': id, 'search_default_student_id': id}">
+                            <div class="o_stat_info">
+                                <field name="registration_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Registrations</span>
+                            </div>
                         </button>
 
-                        <button type="action" class="oe_stat_button"
-                                name="%(certificate_action)d" icon="fa-certificate">
-                            <field name="certificate_count" string="Certificates"/>
+                        <button type="action" name="%(action_college_attendance)d" class="oe_stat_button"
+                                icon="fa-check-square-o"
+                                domain="[('attendance_line_ids.student_id', '=', id)]">
+                            <div class="o_stat_info">
+                                <field name="attendance_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Attendance</span>
+                            </div>
                         </button>
-                    </header>
+
+                        <button type="object" name="action_view_student_invoices" class="oe_stat_button"
+                                icon="fa-money">
+                            <div class="o_stat_info">
+                                <field name="student_total_invoiced" widget="monetary" class="o_stat_value"/>
+                                <span class="o_stat_text">Invoiced</span>
+                            </div>
+                        </button>
+
+                        <button type="action" name="%(certificate_action)d" class="oe_stat_button" icon="fa-certificate"
+                                context="{'default_student_id': id}">
+                            <div class="o_stat_info">
+                                <field name="certificate_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Certificates</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <field name="image_1920" widget="image" class="oe_avatar" options="{'preview_image': 'image_128'}"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                        <h3>
+                            <field name="admission_no" placeholder="Admission Number"/>
+                        </h3>
+                    </div>
 
                     <group>
-                        <field name="name" readonly="1"/>
-                        <field name="admission_no"/>
-                        <field name="admission_date"/>
-                        <field name="age" readonly="1"/>
-                        <field name="gender"/>
-                        <field name="first_name"/>
-                        <field name="last_name"/>
-                        <field name="department_id"/>
-                        <field name="email"/>
-                        <field name="mother_name"/>
-                        <field name="father_name"/>
-                        <field name="image_256" widget="image"/>
-                    </group>
-
-                    <notebook>
-                        <page string="Attendance">
-                            <field name="attendance_ids">
-                                <list>
-                                    <field name="check_in"/>
-                                    <field name="check_out"/>
-                                    <field name="duration"/>
-                                </list>
-                            </field>
-                        </page>
-
-                        <page string="Fees">
-                            <field name="fees_ids">
-                                <list>
-                                    <field name="fee_type_id"/>
-                                    <field name="fee_amount"/>
-                                    <field name="state"/>
-                                </list>
-                            </field>
-                        </page>
-
-                        <page string="Certificates">
-                            <field name="certificate_ids">
-                                <list>
-                                    <field name="certificate_name"/>
-                                    <field name="issued_date"/>
-                                </list>
-                            </field>
-                        </page>
-                    </notebook>
-
-                    <group>
-                        <field name="phone"/>
-                        <field name="communication_address"/>
-                        <field name="same_as_communication" widget="boolean_toggle"/>
+                        <group string="Academic Information">
+                            <field name="department_id" options="{'no_create': True}"/>
+                            <field name="admission_date"/>
+                            <field name="gender"/>
+                        </group>
+                        <group string="Contact Details">
+                            <field name="student_email"/>
+                            <field name="student_phone"/>
+                            <field name="student_mobile"/>
+                        </group>
                     </group>
 
                     <notebook>
-                        <page string="Permanent Address"
-                              modifiers="{'invisible': [('same_as_communication','=',True)]}">
+                        <page string="General Information" name="general_info">
                             <group>
-                                <field name="street"/>
-                                <field name="street2"/>
-                                <field name="city"/>
-                                <field name="state_id"/>
-                                <field name="zip"/>
-                                <field name="country_id"/>
+                                <group string="Personal Details">
+                                    <field name="first_name"/>
+                                    <field name="last_name"/>
+                                    <field name="date_of_birth"/>
+                                    <field name="age"/>
+                                </group>
+                                <group string="Family">
+                                    <field name="father_name"/>
+                                    <field name="mother_name"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Accounting &amp; Finance" name="finance">
+                            <group>
+                                <group string="Financial Standing">
+                                    <field name="student_total_invoiced" widget="monetary"/>
+                                    <field name="student_credit" widget="monetary"
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </group>
+                                <group string="Payment Settings">
+                                    <field name="property_payment_term_id"/>
+                                </group>
                             </group>
                         </page>
                     </notebook>
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
             </form>
         </field>
     </record>
-
 
     <record id="college_student_view_list" model="ir.ui.view">
         <field name="name">college.student.view.list</field>
         <field name="model">college.student</field>
         <field name="arch" type="xml">
-            <list>
-                <field name="name"/>
+            <list string="Students">
                 <field name="admission_no"/>
-                <field name="admission_date"/>
-                <field name="gender"/>
-                <field name="email"/>
-                <field name="phone"/>
+                <field name="name"/>
+                <field name="department_id"/>
+                <field name="status" widget="badge" decoration-info="status == 'new'"
+                       decoration-success="status == 'active'"/>
+                <field name="student_credit" sum="Total Balance"/>
             </list>
         </field>
     </record>
-
 </odoo>

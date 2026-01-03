@@ -1,0 +1,6 @@
+id,name,code,prefix,padding,company_id:id
+seq_college_fees,College Fees Sequence,college.fees,FEES/%(year)s/,5,
+seq_college_appointment,College Appointment Sequence,college.student.appointment,APP/%(year)s/,4,
+seq_college_student_admission,Student Admission Sequence,college.student,STU/%(year)s/,5,
+seq_college_registration,Course Registration Sequence,college.course.registration,REG/%(year)s/,4,
+seq_college_attendance,College Attendance Sequence,college.attendance,ATT/%(year)s/,5,

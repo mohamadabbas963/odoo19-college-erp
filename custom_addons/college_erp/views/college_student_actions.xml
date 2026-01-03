@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-    <!-- Action: Student Admission Form -->
     <record id="action_college_admission_form" model="ir.actions.act_window">
         <field name="name">Student Admission</field>
         <field name="res_model">college.student</field>
@@ -10,7 +9,6 @@
         <field name="target">current</field>
     </record>
 
-    <!-- Action: Attendance -->
     <record id="attendance_action" model="ir.actions.act_window">
         <field name="name">Attendance</field>
         <field name="res_model">college.attendance</field>
@@ -19,13 +17,11 @@
         <field name="context">{'default_student_id': active_id}</field>
     </record>
 
-    <!-- Action: Students (Kanban + List + Form) -->
     <record id="action_college_student" model="ir.actions.act_window">
         <field name="name">Students</field>
         <field name="res_model">college.student</field>
         <field name="view_mode">kanban,list,form</field>
-        <!-- هذا الـ ref مطابق تمامًا للـ id في ملف الكانبان -->
-        <field name="view_id" ref="college_erp.college_student_view_kanban"/>
+        <field name="view_id" ref="college_student_view_kanban"/>
         <field name="context">{'group_by': 'status'}</field>
         <field name="search_view_id" ref="college_student_search_view"/>
     </record>

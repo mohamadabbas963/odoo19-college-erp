@@ -1,4 +1,4 @@
-from odoo import fields, models, api
+from odoo import fields, models, api, _
 from odoo.exceptions import ValidationError, UserError
 from datetime import date
 
@@ -6,189 +6,192 @@ from datetime import date
 class CollegeStudent(models.Model):
     _name = "college.student"
     _description = "College Student"
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+    # الوراثة بالانتداب لجعل الطالب شريكاً تجارياً
+    _inherits = {'res.partner': 'partner_id'}
 
-    # ======== CONSTRAINTS ========
+    # 1. الحقول الأساسية والربط مع الشريك
+    partner_id = fields.Many2one(
+        'res.partner',
+        required=True,
+        ondelete='cascade',
+        string="Partner Record"
+    )
+
+    # حقول الصور مرتبطة بالشريك لتظهر في الكانبان والنموذج
+    image_128 = fields.Image(related='partner_id.image_128', readonly=False)
+    image_1920 = fields.Image(related='partner_id.image_1920', readonly=False)
+
+    admission_no = fields.Char(string="Admission Number", required=True, tracking=True, default='New')
+    first_name = fields.Char(string="First Name", required=True, tracking=True)
+    last_name = fields.Char(string="Last Name", required=True, tracking=True)
+
+    # 2. حقول التواصل والمعلومات الشخصية
+    student_email = fields.Char(string="Student Email", tracking=True)
+    student_phone = fields.Char(string="Student Phone")
+    student_mobile = fields.Char(string="Mobile")
+    gender = fields.Selection(
+        [('male', 'Male'), ('female', 'Female')],
+        string="Gender", required=True, tracking=True
+    )
+    admission_date = fields.Date(string="Admission Date", required=True, default=fields.Date.context_today)
+    date_of_birth = fields.Date(string="Date of Birth", required=True)
+    age = fields.Integer(string="Age", compute="_compute_age", store=True)
+    father_name = fields.Char(string="Father's Name")
+    mother_name = fields.Char(string="Mother's Name")
+    communication_address = fields.Text(string="Communication Address")
+
+    # 3. العلاقات والحالة
+    department_id = fields.Many2one('college.department', string="Department", tracking=True)
+    status = fields.Selection([
+        ('new', 'New'), ('active', 'Active'),
+        ('graduated', 'Graduated'), ('blocked', 'Blocked')
+    ], string="Status", default="new", tracking=True)
+
+    # 4. الحقول المالية (محسوبة من الشريك)
+    currency_id = fields.Many2one(related='partner_id.currency_id')
+    student_total_invoiced = fields.Monetary(string="Student Total Invoiced", compute="_compute_financials", store=True)
+    student_credit = fields.Monetary(string="Student Balance Due", compute="_compute_financials", store=True)
+
+    # 5. الروابط والجداول (One2many)
+    attendance_ids = fields.One2many("college.attendance.line", "student_id", string="Attendance")
+    fees_ids = fields.One2many("college.fees", "student_id", string="Fees")
+    certificate_ids = fields.One2many("college.certificate", "student_id", string="Certificates")
+
+    # 6. حقول العدادات (Smart Buttons Counters)
+    attendance_count = fields.Integer(compute="_compute_counts")
+    fees_count = fields.Integer(compute="_compute_counts")
+    certificate_count = fields.Integer(compute="_compute_counts")
+    appointment_count = fields.Integer(compute="_compute_counts")
+    registration_count = fields.Integer(compute="_compute_counts")
+
+    # --- القيود (Constraints) ---
     _sql_constraints = [
         ('admission_no_unique', 'UNIQUE (admission_no)', 'Admission Number must be unique.')
     ]
-    # ===========================
 
-    # --------- ODOO MODEL SETUP ----------
-    _rec_name = "name"
-    _order = "admission_no"
+    # --- الدوال المحسوبة (Compute Methods) ---
 
-    # --------- STATUSBAR ----------
-    status = fields.Selection(
-        [
-            ('new', 'New'),
-            ('active', 'Active'),
-            ('graduated', 'Graduated'),
-            ('blocked', 'Blocked'),
-        ],
-        string="Status",
-        default="new",
-        tracking=True,
-    )
-
-    # ---------- BASIC FIELDS ----------
-    admission_no = fields.Char(string="Admission Number", required=True)
-    first_name = fields.Char(string="First Name", required=True)
-    last_name = fields.Char(string="Last Name", required=True)
-    gender = fields.Selection(
-        [('male', 'Male'), ('female', 'Female')],
-        string="Gender",
-        required=True
-    )
-    admission_date = fields.Date(string="Admission Date", required=True)
-    father_name = fields.Char(string="Father's Name")
-    mother_name = fields.Char(string="Mother's Name")
-    communication_address = fields.Text(string="Communication Address", required=True)
-    email = fields.Char(string="Email")
-    phone = fields.Char(string="Phone")
-
-    # ======= CALCULATED FIELD =======
-    age = fields.Integer(string="Age", compute="_compute_age", store=True)
-
-    # ---------- ADDRESS FIELDS ----------
-    street = fields.Char()
-    street2 = fields.Char()
-    zip = fields.Char()
-    city = fields.Char()
-    state_id = fields.Many2one(
-        "res.country.state",
-        string='State',
-        domain="[('country_id', '=?', country_id)]"
-    )
-    country_id = fields.Many2one('res.country', string='Country')
-    country_code = fields.Char(related='country_id.code', string="Country Code", store=True)
-    same_as_communication = fields.Boolean(string="Same as Communication", default=True)
-
-    image_1920 = fields.Image(string="Student Image")
-    # نسخ مصغرة للعرض في Kanban وForm
-    image_1024 = fields.Image("Image 1024", related="image_1920", max_width=1024)
-    image_512 = fields.Image("Image 512", related="image_1920", max_width=512)
-    image_256 = fields.Image("Image 256", related="image_1920", max_width=256)
-
-    # ---------- RELATION FIELDS (Many2one) ----------
-    department_id = fields.Many2one('college.department', string="Department")
-    partner_id = fields.Many2one(
-        'res.partner',
-        string="Related Partner",
-        ondelete='set null',
-        help="Linked partner or contact record."
-    )
-
-    # ---------- RELATION FIELDS (One2many) ----------
-    attendance_ids = fields.One2many(
-        "college.attendance",
-        "student_id",
-        string="Attendance Records"
-    )
-
-    fees_ids = fields.One2many(
-        "college.fees",
-        "student_id",
-        string="Fees Records"
-    )
-
-    certificate_ids = fields.One2many(
-        "college.certificate",
-        "student_id",
-        string="Certificates"
-    )
-
-    # ---------- COMPUTED NAME ----------
-    name = fields.Char(
-        string="Student Name",
-        compute="_compute_name",
-        store=True,
-        readonly=False
-    )
-
-    # ---------- SMART BUTTON COUNTERS (مطلوبة في الـ XML) ----------
-    attendance_count = fields.Integer(
-        string="Attendance Count",
-        compute="_compute_attendance_count"
-    )
-    fees_count = fields.Integer(
-        string="Fees Count",
-        compute="_compute_fees_count"
-    )
-    certificate_count = fields.Integer(
-        string="Certificates Count",
-        compute="_compute_certificate_count"
-    )
-
-    # --------------------------
-    # COMPUTE METHODS
-    # --------------------------
-    @api.depends('first_name', 'last_name', 'admission_no')
-    def _compute_name(self):
+    @api.depends('partner_id.total_invoiced', 'partner_id.credit')
+    def _compute_financials(self):
         for rec in self:
-            rec.name = f"{rec.first_name or ''} {rec.last_name or ''} [{rec.admission_no or ''}]"
+            rec.student_total_invoiced = rec.partner_id.total_invoiced
+            rec.student_credit = rec.partner_id.credit
 
-    @api.depends('admission_date')
+    @api.depends('date_of_birth')
     def _compute_age(self):
         today = date.today()
         for rec in self:
-            if rec.admission_date:
-                # حساب الفرق بالسنوات
-                rec.age = today.year - rec.admission_date.year - \
-                          ((today.month, today.day) < (rec.admission_date.month, rec.admission_date.day))
+            if rec.date_of_birth:
+                rec.age = today.year - rec.date_of_birth.year - \
+                          ((today.month, today.day) < (rec.date_of_birth.month, rec.date_of_birth.day))
             else:
                 rec.age = 0
 
-    @api.depends('attendance_ids')
-    def _compute_attendance_count(self):
+    def _compute_counts(self):
+        """ دالة موحدة لحساب جميع العدادات لتقليل الضغط على قاعدة البيانات """
         for rec in self:
-            rec.attendance_count = self.env['college.attendance'].search_count([('student_id', '=', rec.id)])
+            rec.attendance_count = len(rec.attendance_ids)
+            rec.fees_count = len(rec.fees_ids)
+            rec.certificate_count = len(rec.certificate_ids)
 
-    @api.depends('fees_ids')
-    def _compute_fees_count(self):
-        for rec in self:
-            rec.fees_count = self.env['college.fees'].search_count([('student_id', '=', rec.id)])
+            # حساب المواعيد والتسجيلات من خلال البحث في الموديلات الأخرى
+            rec.appointment_count = self.env['college.student.appointment'].search_count([
+                ('student_id', '=', rec.id)
+            ])
+            rec.registration_count = self.env['college.course.registration'].search_count([
+                ('student_id', '=', rec.id)
+            ])
 
-    @api.depends('certificate_ids')
-    def _compute_certificate_count(self):
-        for rec in self:
-            rec.certificate_count = self.env['college.certificate'].search_count([('student_id', '=', rec.id)])
+    # --- الدوال التفاعلية (Onchange & Actions) ---
 
-    # --------------------------
-    # ONCHANGE METHODS
-    # --------------------------
-    @api.onchange('same_as_communication')
-    def _onchange_same_as_communication(self):
-        if self.same_as_communication:
-            self.street = self.communication_address
+    @api.onchange('first_name', 'last_name')
+    def _onchange_student_name(self):
+        self.name = f"{self.first_name or ''} {self.last_name or ''}".strip()
 
-    # --------------------------
-    # CONSTRAINTS
-    # --------------------------
-    @api.constrains('email')
-    def _check_email(self):
-        for rec in self:
-            if rec.email and '@' not in rec.email:
-                raise ValidationError("Please enter a valid email address.")
-
-    # --------------------------
-    # WORKFLOW ACTIONS (STATUSBAR)
-    # --------------------------
     def action_activate(self):
-        for rec in self:
-            if rec.status == 'active':
-                continue  # الطالب مفعل مسبقاً، لا نفعل شيء
-            rec.status = 'active'
+        self.write({'status': 'active'})
 
     def action_graduate(self):
-        for rec in self:
-            if rec.status != 'active':
-                # بدل رفع خطأ، يمكن تخطي أو إعلام المستخدم بطريقة مرنة
-                continue
-            rec.status = 'graduated'
+        self.write({'status': 'graduated'})
 
     def action_block(self):
-        for rec in self:
-            if rec.status in ['blocked']:
-                continue  # الطالب مفعل مسبقاً كـ blocked
-            rec.status = 'blocked'
+        self.write({'status': 'blocked'})
 
+    def action_view_appointments(self):
+        return {
+            'name': _('Academic Appointments'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'college.student.appointment',
+            'view_mode': 'list,form',
+            'domain': [('student_id', '=', self.id)],
+            'context': {'default_student_id': self.id},
+        }
+
+    def action_view_student_invoices(self):
+        self.ensure_one()
+        return {
+            'name': 'Student Invoices',
+            'type': 'ir.actions.act_window',
+            'res_model': 'account.move',
+            'view_mode': 'list,form',
+            'domain': [('student_id', '=', self.id), ('move_type', '=', 'out_invoice')],
+            'context': {
+                'default_move_type': 'out_invoice',
+                'default_student_id': self.id,
+                'default_partner_id': self.partner_id.id,
+            },
+        }
+
+    def action_create_invoice(self):
+        self.ensure_one()
+        uninvoiced_registrations = self.env['college.course.registration'].search([
+            ('student_id', '=', self.id),
+            ('state', '=', 'confirmed'),
+            ('is_invoiced', '=', False)
+        ])
+        if not uninvoiced_registrations:
+            raise UserError(_("لا توجد تسجيلات مؤكدة جديدة تحتاج لفواتير لهذا الطالب."))
+
+        invoice_line_vals = []
+        for reg in uninvoiced_registrations:
+            # نجمع كل الكورسات في فاتورة واحدة
+            for line in reg.line_ids:
+                invoice_line_vals.append((0, 0, {
+                    'name': f"Fees for: {line.course_id.name} - {self.name}",
+                    'quantity': 1,
+                    'price_unit': line.registration_fee,
+                }))
+
+        invoice = self.env['account.move'].create({
+            'move_type': 'out_invoice',
+            'partner_id': self.partner_id.id,
+            'student_id': self.id,
+            'invoice_date': fields.Date.today(),
+            'invoice_line_ids': invoice_line_vals,
+        })
+        uninvoiced_registrations.write({'is_invoiced': True, 'invoice_id': invoice.id})
+        return {
+            'name': _('New Student Invoice'),
+            'view_mode': 'form',
+            'res_model': 'account.move',
+            'res_id': invoice.id,
+            'type': 'ir.actions.act_window',
+        }
+
+    # --- الدوال الأساسية للنظام (CRUD) ---
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get('admission_no', 'New') == 'New':
+                vals['admission_no'] = self.env['ir.sequence'].next_by_code('college.student') or 'New'
+
+            first = vals.get('first_name', '')
+            last = vals.get('last_name', '')
+            combined_name = f"{first} {last}".strip()
+
+            if not vals.get('name'):
+                vals['name'] = combined_name or "New Student"
+
+        return super(CollegeStudent, self).create(vals_list)
