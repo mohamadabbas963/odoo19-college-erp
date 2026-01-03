@@ -19,3 +19,7 @@ filestore/
 Thumbs.db
 
 .idea/
+# Docker & Database (Crucial)
+pg_data/
+odoo_data/
+config/odoo.conf
