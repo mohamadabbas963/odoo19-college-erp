@@ -11,3 +11,6 @@ access_college_student_appointment,access.college.student.appointment,model_coll
 access_college_course,access.college.course,model_college_course,base.group_user,1,1,1,1
 access_college_course_registration,access.college.course.registration,model_college_course_registration,base.group_user,1,1,1,1
 access_college_course_registration_line,access.college.course.registration.line,model_college_course_registration_line,base.group_user,1,1,1,1
+access_college_exam_result,college.exam.result,model_college_exam_result,base.group_user,1,1,1,1
+access_college_exam_result_line,college.exam.result.line,model_college_exam_result_line,base.group_user,1,1,1,1
+access_college_classroom,college.classroom,model_college_classroom,base.group_user,1,1,1,1

@@ -22,6 +22,12 @@
               action="action_college_student"
               sequence="3"/>
 
+    <menuitem id="menu_college_exam_result"
+              name="Exam Results"
+              parent="menu_college_erp_student"
+              action="action_college_exam_result"
+              sequence="25"/>
+
     <menuitem id="menu_college_attendance"
               name="Attendance"
               parent="menu_college_erp_root"
@@ -70,5 +76,10 @@
               action="action_college_course"
               sequence="11"/>
 
+    <menuitem id="menu_college_classroom"
+              name="Classrooms"
+              parent="menu_college_erp_root"
+              action="action_college_classroom"
+              sequence="12"/>
 
 </odoo>

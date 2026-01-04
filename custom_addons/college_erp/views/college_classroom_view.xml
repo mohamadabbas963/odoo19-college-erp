@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_college_classroom_form" model="ir.ui.view">
+        <field name="name">college.classroom.form</field>
+        <field name="model">college.classroom</field>
+        <field name="arch" type="xml">
+            <form string="Smart Classroom">
+                <header>
+                    <button name="action_auto_distribute_students"
+                            string="Auto Distribute Students"
+                            type="object"
+                            class="oe_highlight"
+                            icon="fa-magic"
+                            confirm="هل أنت متأكد من رغبتك في توزيع الطلاب تلقائياً بناءً على الاختصاص والسعة؟"/>
+
+                    <button name="action_clear_classroom"
+                            string="Clear Classroom"
+                            type="object"
+                            class="btn-danger"
+                            icon="fa-trash"
+                            confirm="تحذير: سيتم إخلاء القاعة من جميع الطلاب المرتبطين بها. هل تود الاستمرار؟"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" placeholder="مثلاً: قاعة الحاسوب المتطورة"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Capacity Management">
+                            <field name="capacity"/>
+                            <field name="current_student_count" readonly="1"/>
+                            <field name="available_seats"
+                                   decoration-danger="available_seats == 0"
+                                   decoration-success="available_seats > 0"
+                                   widget="integer"/>
+                        </group>
+                        <group string="Rules &amp; Specializations">
+                            <field name="allowed_department_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Currently Assigned Students" name="students">
+                            <field name="assigned_student_ids" readonly="1">
+                                <list string="Students in this Room">
+                                    <field name="admission_no"/>
+                                    <field name="name"/>
+                                    <field name="department_id"/>
+                                    <field name="status" widget="badge" decoration-success="status == 'active'"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_college_classroom_kanban" model="ir.ui.view">
+        <field name="name">college.classroom.kanban</field>
+        <field name="model">college.classroom</field>
+        <field name="arch" type="xml">
+            <kanban class="o_res_partner_kanban">
+                <field name="name"/>
+                <field name="capacity"/>
+                <field name="current_student_count"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title">
+                                    <field name="name"/>
+                                </strong>
+                                <div class="text-muted">
+                                    <span>Capacity:</span>
+                                    <field name="capacity"/>
+                                </div>
+                                <div class="mt-2">
+                                    <span class="o_form_label">Occupancy:</span>
+                                    <progress t-att-value="record.current_student_count.raw_value"
+                                              t-att-max="record.capacity.raw_value"
+                                              style="width: 100%; height: 10px;"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_college_classroom" model="ir.actions.act_window">
+        <field name="name">Classrooms</field>
+        <field name="res_model">college.classroom</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Smart Classroom!
+            </p>
+        </field>
+    </record>
+</odoo>

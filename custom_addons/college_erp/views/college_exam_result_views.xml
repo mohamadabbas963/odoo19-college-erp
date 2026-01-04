@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_college_exam_result_form" model="ir.ui.view">
+        <field name="name">college.exam.result.form</field>
+        <field name="model">college.exam.result</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_load_courses" string="Load Courses" type="object" class="oe_highlight" invisible="name == '/'"/>
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="student_id"/>
+                            <field name="department_id"/>
+                        </group>
+                        <group>
+                            <field name="exam_date"/>
+                            <field name="average_percentage" widget="progressbar"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Grades">
+                            <field name="result_line_ids">
+                                <list editable="bottom">
+                                    <field name="course_id"/>
+                                    <field name="max_score"/>
+                                    <field name="score"/>
+                                    <field name="grade"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_marks" string="Total Score"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_college_exam_result_list" model="ir.ui.view">
+        <field name="name">college.exam.result.list</field>
+        <field name="model">college.exam.result</field>
+        <field name="arch" type="xml">
+            <list string="Exam Results">
+                <field name="name"/>
+                <field name="student_id"/>
+                <field name="exam_date"/>
+                <field name="average_percentage" widget="progressbar"/>
+                <field name="status" widget="badge" decoration-success="status == 'pass'" decoration-danger="status == 'fail'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_college_exam_result" model="ir.actions.act_window">
+        <field name="name">Exam Results</field>
+        <field name="res_model">college.exam.result</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

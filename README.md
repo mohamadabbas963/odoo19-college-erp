@@ -1,37 +1,38 @@
-# Odoo
+# Hi, I'm Mohamad Abbas 👋
+### 🏛️ Odoo Developer | ERP Specialist | Backend Engineer
 
-[![Build Status](https://runbot.odoo.com/runbot/badge/flat/1/master.svg)](https://runbot.odoo.com/runbot)
-[![Tech Doc](https://img.shields.io/badge/master-docs-875A7B.svg?style=flat&colorA=8F8F8F)](https://www.odoo.com/documentation/master)
-[![Help](https://img.shields.io/badge/master-help-875A7B.svg?style=flat&colorA=8F8F8F)](https://www.odoo.com/forum/help-1)
-[![Nightly Builds](https://img.shields.io/badge/master-nightly-875A7B.svg?style=flat&colorA=8F8F8F)](https://nightly.odoo.com/)
+A result-driven **Odoo Developer** with a passion for building robust and scalable ERP systems. I specialize in modern development environments, specifically leveraging the power of **Linux** for high-performance deployments.
 
-Odoo is a suite of web based open source business apps.
+---
 
-The main Odoo Apps include an [Open Source CRM](https://www.odoo.com/page/crm),
-[Website Builder](https://www.odoo.com/app/website),
-[eCommerce](https://www.odoo.com/app/ecommerce),
-[Warehouse Management](https://www.odoo.com/app/inventory),
-[Project Management](https://www.odoo.com/app/project),
-[Billing &amp; Accounting](https://www.odoo.com/app/accounting),
-[Point of Sale](https://www.odoo.com/app/point-of-sale-shop),
-[Human Resources](https://www.odoo.com/app/employees),
-[Marketing](https://www.odoo.com/app/social-marketing),
-[Manufacturing](https://www.odoo.com/app/manufacturing),
-[...](https://www.odoo.com/)
+### 🚀 Technical Expertise
+* **Languages & Frameworks:** Python, Odoo (ORM, OWL), XML.
+* **OS & Environment:** - 🐧 **Linux (Ubuntu):** Expert in CLI, system administration, and shell scripting.
+  - **Windows Subsystem for Linux (WSL2):** Seamless integration for Odoo development.
+* **DevOps:** Docker & Docker Compose, PostgreSQL.
+* **Version Control:** Git (Advanced Branching & Merging).
 
-Odoo Apps can be used as stand-alone applications, but they also integrate seamlessly so you get
-a full-featured [Open Source ERP](https://www.odoo.com) when you install several Apps.
+---
 
-## Getting started with Odoo
+### 🛠️ Professional Projects
+- **[University Management System (ERP)](https://github.com/mohamadabbas963/odoo19-college-erp)** *A comprehensive ERP solution featuring student lifecycle, attendance, and accounting integration.*
 
-For a standard installation please follow the [Setup instructions](https://www.odoo.com/documentation/master/administration/install/install.html)
-from the documentation.
+---
 
-To learn the software, we recommend the [Odoo eLearning](https://www.odoo.com/slides),
-or [Scale-up, the business game](https://www.odoo.com/page/scale-up-business-game).
-Developers can start with [the developer tutorials](https://www.odoo.com/documentation/master/developer/howtos.html).
+### 📊 GitHub Insights
+![Mohamad's GitHub stats](https://github-readme-stats.vercel.app/api?username=mohamadabbas963&show_icons=true&theme=radical&hide_border=true)
+![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=mohamadabbas963&layout=compact&theme=radical&hide_border=true)
 
-## Security
+---
 
-If you believe you have found a security issue, check our [Responsible Disclosure page](https://www.odoo.com/security-report)
-for details and get in touch with us via email.
+### 🛠 Tech Stack
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![Odoo](https://img.shields.io/badge/odoo-875A7B?style=for-the-badge&logo=odoo&logoColor=white)
+![Ubuntu](https://img.shields.io/badge/Ubuntu-E9433F?style=for-the-badge&logo=ubuntu&logoColor=white)
+![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+
+---
+
+### 📫 Let's Connect
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/رابط-حسابك-هنا)
