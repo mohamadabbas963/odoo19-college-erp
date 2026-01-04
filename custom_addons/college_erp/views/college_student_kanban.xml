@@ -4,7 +4,7 @@
         <field name="name">college.student.kanban</field>
         <field name="model">college.student</field>
         <field name="arch" type="xml">
-            <kanban class="o_kanban_small_column" default_group_by="status" sample="1">
+            <kanban class="o_kanban_small_column" default_group_by="status" sample="1" js_class="student_dashboard_kanban">
                 <field name="id"/>
                 <field name="name"/>
                 <field name="status"/>

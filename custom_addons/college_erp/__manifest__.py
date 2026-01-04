@@ -29,11 +29,13 @@ Form students administration to exams, covering all aspects of college administr
 
         # 3. واجهات الموديلات المساعدة (Views Only)
         "views/college_attendance_views.xml",
+        "views/college_exam_result_views.xml",
         "views/college_fees_views.xml",
         "views/college_fee_type_views.xml",
         "views/college_certificate_views.xml",
         "views/college_appointment_views.xml",
         "views/account_move_views.xml",
+        "views/college_classroom_view.xml",
         "views/college_erp_teacher_views.xml",
 
         "views/college_course_registration_views.xml",
@@ -48,9 +50,19 @@ Form students administration to exams, covering all aspects of college administr
         # 6. الإضافات (Smart Buttons / Inherited Views)
         "views/college_student_smart_buttons.xml",
 
+        "reports/college_exam_report.xml",
+        "reports/college_payment_report.xml",
+
         # 7. القوائم (Menus) - تعتمد على الأكشنز
         "views/college_erp_menus.xml",
     ],
+
+    'assets': {
+        'web.assets_backend': [
+            'college_erp/static/src/xml/student_dashboard.xml',
+            'college_erp/static/src/js/student_dashboard.js',
+        ],
+    },
     'application': True,
     'installable': True,
     'auto_install': False,

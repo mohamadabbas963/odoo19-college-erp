@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_exam_transcript" model="ir.actions.report">
+        <field name="name">Student Transcript</field>
+        <field name="model">college.exam.result</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">college_erp.report_exam_transcript_template</field>
+        <field name="report_file">college_erp.report_exam_transcript_template</field>
+        <field name="print_report_name">'Transcript - %s' % (object.student_id.name)</field>
+        <field name="binding_model_id" ref="model_college_exam_result"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_exam_transcript_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: 'Arial';">
+                        <div class="text-center" style="border-bottom: 2px solid #333; margin-bottom: 20px;">
+                            <h2>Academic Transcript</h2>
+                            <h4 t-field="o.student_id.department_id.name"/>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <strong>Student:</strong> <span t-field="o.student_id.name"/><br/>
+                                <strong>Admission No:</strong> <span t-field="o.student_id.admission_no"/>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong>Exam Date:</strong> <span t-field="o.exam_date"/><br/>
+                                <strong>Status:</strong>
+                                <span t-field="o.status" t-attf-style="color: #{'green' if o.status == 'pass' else 'red'}; font-weight: bold;"/>
+                            </div>
+                        </div>
+
+                        <table class="table table-sm table-bordered mt-4">
+                            <thead class="table-light text-center">
+                                <tr>
+                                    <th>Course</th>
+                                    <th>Max</th>
+                                    <th>Obtained</th>
+                                    <th>Grade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.result_line_ids" t-as="line">
+                                    <tr>
+                                        <td><span t-field="line.course_id.name"/></td>
+                                        <td class="text-center"><span t-field="line.max_score"/></td>
+                                        <td class="text-center"><span t-field="line.score"/></td>
+                                        <td class="text-center"><strong><span t-field="line.grade"/></strong></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <div class="row justify-content-end">
+                            <div class="col-4">
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td><strong>Total:</strong></td>
+                                        <td class="text-end"><span t-field="o.total_marks"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Percentage:</strong></td>
+                                        <td class="text-end"><strong><span t-field="o.average_percentage"/>%</strong></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="mt-5">
+                            <div class="row">
+                                <div class="col-6 text-center">
+                                    <p>__________________________</p>
+                                    <strong>Registrar Signature</strong>
+                                </div>
+                                <div class="col-6 text-center">
+                                    <p>__________________________</p>
+                                    <strong>College Seal</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

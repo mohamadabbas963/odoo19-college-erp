@@ -4,11 +4,12 @@
         <field name="name">college.attendance.list</field>
         <field name="model">college.attendance</field>
         <field name="arch" type="xml">
-            <list string="Sessions Attendance">
+            <list string="Sessions Attendance" decoration-info="state == 'draft'" decoration-success="state == 'done'">
                 <field name="name"/>
                 <field name="date"/>
                 <field name="course_id"/>
                 <field name="teacher_id"/>
+                <field name="classroom_id"/> <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'done'"/>
             </list>
         </field>
     </record>
@@ -20,9 +21,27 @@
             <form>
                 <header>
                     <button name="action_load_students"
-                            string="Load Registered Students"
+                            string="Load by Course"
                             type="object"
-                            class="oe_highlight"/>
+                            class="oe_highlight"
+                            invisible="state != 'draft'"/>
+
+                    <button name="action_generate_attendance_list"
+                            string="Load by Classroom"
+                            type="object"
+                            class="btn-info"
+                            invisible="state != 'draft'"/>
+
+                    <button name="action_confirm"
+                            string="Confirm Attendance"
+                            type="object"
+                            class="oe_highlight"
+                            invisible="state != 'draft'"/>
+
+                    <button name="action_set_to_draft"
+                            string="Reset to Draft"
+                            type="object"
+                            invisible="state != 'done'"/>
 
                     <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
                 </header>
@@ -33,25 +52,27 @@
                         </h1>
                     </div>
                     <group>
-                        <group>
-                            <field name="course_id" options="{'no_create': True, 'no_open': True}"/>
-                            <field name="teacher_id" options="{'no_create': True}"/>
+                        <group string="Academic Info">
+                            <field name="course_id" options="{'no_create': True, 'no_open': True}" readonly="state == 'done'"/>
+                            <field name="teacher_id" options="{'no_create': True}" readonly="state == 'done'"/>
                         </group>
-                        <group>
-                            <field name="date"/>
+                        <group string="Session Info">
+                            <field name="date" readonly="state == 'done'"/>
+                            <field name="classroom_id" options="{'no_create': True}" readonly="state == 'done'"/>
                         </group>
                     </group>
                     <notebook>
                         <page string="Attendance Sheet" name="attendance_sheet">
-                            <field name="attendance_line_ids">
+                            <field name="attendance_line_ids" readonly="state == 'done'">
                                 <list editable="bottom"
+                                      create="0"
                                       decoration-success="status == 'present'"
                                       decoration-danger="status == 'absent'"
                                       decoration-warning="status == 'late'">
                                     <field name="student_id" readonly="1"/>
                                     <field name="admission_no" readonly="1"/>
                                     <field name="status" widget="selection_badge"/>
-                                    <field name="remark"/>
+                                    <field name="remark" placeholder="Add note..."/>
                                 </list>
                             </field>
                         </page>
@@ -76,7 +97,7 @@
                 Create a new attendance session.
             </p>
             <p>
-                Select a course and teacher, then load the students who have confirmed registrations.
+                You can load students from the <b>Course Registration</b> or from the <b>Smart Classroom</b> distribution.
             </p>
         </field>
     </record>

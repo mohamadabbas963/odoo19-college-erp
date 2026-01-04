@@ -58,6 +58,14 @@
                             </div>
                         </button>
 
+                        <button name="action_view_exam_results" type="object" class="oe_stat_button"
+                                icon="fa-graduation-cap">
+                            <div class="o_stat_info">
+                                <field name="exam_result_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Exam Results</span>
+                            </div>
+                        </button>
+
                         <button type="action" name="%(action_college_course_registration)d" class="oe_stat_button"
                                 icon="fa-book"
                                 context="{'default_student_id': id, 'search_default_student_id': id}">
@@ -106,9 +114,11 @@
                     <group>
                         <group string="Academic Information">
                             <field name="department_id" options="{'no_create': True}"/>
+                            <field name="current_classroom_id" options="{'no_create': True}" readonly="1"/>
                             <field name="admission_date"/>
                             <field name="gender"/>
                         </group>
+
                         <group string="Contact Details">
                             <field name="student_email"/>
                             <field name="student_phone"/>
