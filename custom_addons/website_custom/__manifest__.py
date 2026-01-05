@@ -1,6 +1,6 @@
 {
     'name': 'Custom Website Enhancements',
-    'version': '19.0.1.0',
+    'version': '18.0.1.0',
     'category': 'Website',
     'summary': 'Customizations for the eCommerce website',
     'description': 'Add custom features and templates to your eCommerce website.',
@@ -16,3 +16,4 @@
     'auto_install': False,
     'groups': ['website_custom.group_website_frontend_dev'],  # يربط الموديول بالمجموعة
 }
+
