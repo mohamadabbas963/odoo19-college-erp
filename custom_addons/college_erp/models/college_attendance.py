@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+""" University Management System """
+# -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
@@ -48,7 +50,7 @@ class CollegeAttendance(models.Model):
             ]
             if self.search_count(domain) > 0:
                 raise ValidationError(
-                    _(
+                    self.env._(
                         "Attendance for this course and teacher has already been recorded for today!"
                     )
                 )
@@ -60,7 +62,7 @@ class CollegeAttendance(models.Model):
         self.ensure_one()
         if self.state == "done":
             raise ValidationError(
-                _("You cannot reload students for a completed attendance record.")
+                self.env._("You cannot reload students for a completed attendance record.")
             )
 
         self.attendance_line_ids = [(5, 0, 0)]
@@ -72,7 +74,7 @@ class CollegeAttendance(models.Model):
         )
 
         if not confirmed_registrations:
-            raise ValidationError(_("No confirmed students found for this course!"))
+            raise ValidationError(self.env._("No confirmed students found for this course!"))
 
         attendance_lines = []
         for reg in confirmed_registrations:
@@ -92,11 +94,11 @@ class CollegeAttendance(models.Model):
         """سحب الطلاب بناءً على القاعة (Smart Classroom)"""
         for rec in self:
             if not rec.classroom_id:
-                raise ValidationError(_("Please select a classroom first!"))
+                raise ValidationError(self.env._("Please select a classroom first!"))
 
             if rec.state == "done":
                 raise ValidationError(
-                    _("You cannot change attendance for a completed record.")
+                    self.env._("You cannot change attendance for a completed record.")
                 )
 
             rec.attendance_line_ids = [(5, 0, 0)]

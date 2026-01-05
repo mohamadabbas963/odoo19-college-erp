@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+""" University Management System """
+# -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
@@ -49,7 +51,7 @@ class CollegeClassroom(models.Model):
         """
         for rec in self:
             if not rec.allowed_department_ids:
-                raise ValidationError(_("يرجى تحديد الاختصاصات المسموحة أولاً!"))
+                raise ValidationError(self.env._("يرجى تحديد الاختصاصات المسموحة أولاً!"))
 
             # البحث عن طلاب من نفس الاختصاص ليس لديهم قاعة حالياً
             students_to_assign = self.env["college.student"].search(
