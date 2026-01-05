@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from . import college_department
 from . import college_classroom
 from . import college_course

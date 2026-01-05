@@ -1,7 +1,7 @@
 {
     "name": "College ERP",
     "version": "19.0.1.0.0",
-    "author": "Mohamad Abbas",
+    "author": "Mohamad Abbas, Odoo Community Association (OCA)",
     "category": "Education",
     "summary": "Comprehensive ERP solution for University Management",
     "website": "https://github.com/mohamadabbas963/odoo19-college-erp",
