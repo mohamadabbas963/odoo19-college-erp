@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+""" University Management System """
+# -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
@@ -63,7 +65,7 @@ class CollegeExamResult(models.Model):
         """سحب المواد التي سجلها الطالب في موديول التسجيل وأكدها"""
         self.ensure_one()
         if not self.student_id:
-            raise ValidationError(_("الرجاء اختيار الطالب أولاً!"))
+            raise ValidationError(self.env._("الرجاء اختيار الطالب أولاً!"))
 
         # 1. البحث عن التسجيلات المؤكدة للطالب
         registrations = self.env["college.course.registration.line"].search(
@@ -74,7 +76,7 @@ class CollegeExamResult(models.Model):
         )
 
         if not registrations:
-            raise ValidationError(_("لا يوجد مواد مسجلة ومؤكدة لهذا الطالب."))
+            raise ValidationError(self.env._("لا يوجد مواد مسجلة ومؤكدة لهذا الطالب."))
 
         # 2. تجهيز الأسطر (مسح القديم وإضافة الجديد)
         lines = []

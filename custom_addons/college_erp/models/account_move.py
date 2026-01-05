@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+""" University Management System """
+# -*- coding: utf-8 -*-
 from odoo import models, fields
 
 

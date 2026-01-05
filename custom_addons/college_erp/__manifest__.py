@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+""" University Management System """
 {
     "name": "College ERP",
     "version": "19.0.1.0.0",

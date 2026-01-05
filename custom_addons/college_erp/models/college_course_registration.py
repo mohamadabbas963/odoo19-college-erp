@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+""" University Management System """
+# -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
@@ -14,7 +16,7 @@ class CollegeCourseRegistration(models.Model):
         required=True,
         copy=False,
         readonly=True,
-        default=lambda self: _("New"),
+        default=lambda self: self.env._("New"),
     )
     student_id = fields.Many2one(
         "college.student", string="Student", required=True, tracking=True
@@ -61,10 +63,10 @@ class CollegeCourseRegistration(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
-            if vals.get("name", _("New")) == _("New"):
+            if vals.get("name", self.env._("New")) == self.env._("New"):
                 vals["name"] = self.env["ir.sequence"].next_by_code(
                     "college.course.registration"
-                ) or _("New")
+                ) or self.env._("New")
         return super().create(vals_list)
 
     def action_submit(self):
@@ -73,7 +75,7 @@ class CollegeCourseRegistration(models.Model):
     def action_confirm(self):
         for rec in self:
             if not rec.line_ids:
-                raise UserError(_("You cannot confirm a registration without courses!"))
+                raise UserError(self.env._("You cannot confirm a registration without courses!"))
             rec.state = "confirmed"
 
     def action_cancel(self):
