@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "College ERP",
-    "version": "19.0.1.0.0",
+    "version": "18.0.1.0.0",
     "author": "Mohamad Abbas",
     "category": "Education",
     "summary": "Comprehensive ERP solution for University Management",
