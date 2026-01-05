@@ -18,7 +18,6 @@ jobs:
         with:
           python-version: '3.10'
 
-      # إضافة مهمة لإصلاح نهايات الأسطر آلياً داخل الـ Container
       - name: Fix Line Endings
         run: |
           find custom_addons/college_erp -type f -name "*.py" -exec sed -i 's/\r$//' {} +
@@ -34,12 +33,8 @@ jobs:
 
       - name: Run Pylint-Odoo (Odoo Standards)
         run: |
-          # التعديل هنا: أضفنا --disable لتجاهل الأخطاء التي لا تتعلق بجودة الكود البرمجي 
-          # E0401: لتجاهل عدم وجود مكتبة اودو (import-error)
-          # C0327: لتجاهل مشكلة نهايات الأسطر (تم حلها بالأمر السابق ولكن كأمان إضافي)
-          # R0903: لتجاهل قلة الدوال داخل الكلاس (معيار غير ضروري حالياً)
           pylint --load-plugins=pylint_odoo \
-                 --disable=E0401,C0327,R0903,C0115,W0201,W8113,C0116,C0301,W0611,C0304
+                 --disable=E0401,C0327,R0903,C0115,W0201,W8113,C0116,C0301,W0611,C0304 \
                  custom_addons/college_erp
 
   build-and-push-docker:
