@@ -2,7 +2,7 @@
     'name': 'Hospital Management System',
     'author': 'Wlnut Software Solutions',
     'license': 'LGPL-3',
-    'version': '19.0.1.0',
+    'version': '18.0.1.0',
     'depends': ['base', 'mail', 'product', 'account',],
     'data': [
         'security/security.xml',
@@ -20,4 +20,5 @@
     'application': True,
     'assets': {},
     'images': ['static/description/icon.png'],
+
 }
