@@ -1,0 +1,54 @@
+name: Odoo CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, feature/university-development ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Linting Tools
+        run: |
+          pip install flake8 pylint-odoo
+
+      - name: Run Flake8 (Style Check)
+        run: |
+          # فحص الأخطاء البرمجية والتنسيقية
+          flake8 custom_addons/college_erp --count --select=E9,F63,F7,F82 --show-source --statistics
+
+      - name: Run Pylint-Odoo (Odoo Standards)
+        run: |
+          # التأكد من أن الكود يتبع معايير شركة أودو الرسمية
+          pylint --load-plugins=pylint_odoo custom_addons/college_erp
+
+  build-and-push-docker:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository }}/odoo-custom:latest
