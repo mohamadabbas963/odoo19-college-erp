@@ -61,7 +61,7 @@ class CollegeAppointment(models.Model):
                     self.env["ir.sequence"].next_by_code("college.student.appointment")
                     or "New"
                 )
-        return super(CollegeAppointment, self).create(vals_list)
+        return super().create(vals_list)
 
     def action_confirm(self):
         self.state = "confirmed"

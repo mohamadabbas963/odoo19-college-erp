@@ -48,4 +48,4 @@ class CollegeFees(models.Model):
                 vals["name"] = (
                     self.env["ir.sequence"].next_by_code("college.fees") or "New"
                 )
-        return super(CollegeFees, self).create(vals_list)
+        return super().create(vals_list)
